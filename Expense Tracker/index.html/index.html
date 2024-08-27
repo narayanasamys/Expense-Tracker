@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #938d99;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #929ea5;
+        }
+        #expenseList {
+            margin-top: 20px;
+        }
+        .expense-item {
+            background-color: #9b8a8a;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .expense-item button {
+            background-color: #d9534f;
+            padding: 5px 10px;
+            margin-top: 5px;
+        }
+        .expense-item button:hover {
+            background-color: #c9302c;
+        }
+        #totalExpenses {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Expense Tracker</h1>
+        <div class="input-group">
+            <label for="expenseName">Expense Name:</label>
+            <input type="text" id="expenseName" required>
+        </div>
+        <div class="input-group">
+            <label for="expenseAmount">Amount:</label>
+            <input type="number" id="expenseAmount" required>
+        </div>
+        <button onclick="addExpense()">Add Expense</button>
+        <div id="expenseList"></div>
+        <div id="totalExpenses"></div>
+    </div>
+
+    <script>
+        let expenses = [];
+
+        function addExpense() {
+            const name = document.getElementById('expenseName').value;
+            const amount = parseFloat(document.getElementById('expenseAmount').value);
+
+            if (name && amount) {
+                expenses.push({ name, amount });
+                updateExpenseList();
+                clearInputs();
+            } else {
+                alert('Please enter both name and amount.');
+            }
+        }
+
+        function updateExpenseList() {
+            const expenseList = document.getElementById('expenseList');
+            const totalExpenses = document.getElementById('totalExpenses');
+            expenseList.innerHTML = '';
+            let total = 0;
+
+            expenses.forEach((expense, index) => {
+                const expenseItem = document.createElement('div');
+                expenseItem.classList.add('expense-item');
+                expenseItem.innerHTML = `
+                    <p>${expense.name}: $${expense.amount.toFixed(2)}</p>
+                    <button onclick="removeExpense(${index})">Remove</button>
+                `;
+                expenseList.appendChild(expenseItem);
+                total += expense.amount;
+            });
+
+            totalExpenses.textContent = `Total Expenses: $${total.toFixed(2)}`;
+        }
+
+        function removeExpense(index) {
+            expenses.splice(index, 1);
+            updateExpenseList();
+        }
+
+        function clearInputs() {
+            document.getElementById('expenseName').value = '';
+            document.getElementById('expenseAmount').value = '';
+        }
+    </script>
+</body>
+</html>
